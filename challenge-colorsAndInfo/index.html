@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        p {
+            font-family: sans-serif;
+            text-align: center;
+            margin: 5px auto;
+        }
+    </style>
+
+</head>
+<body>
+        <p id="cityname">name</p>
+        <p id="tax-rate">tax</p>
+    <div id="graphic"></div>
+<script>
+    let jsonObj;
+    let myJson;
+
+    let color;
+
+    // load the DOM
+    document.addEventListener("DOMContentLoaded", loadItems);
+
+    async function loadItems() {
+        // load json
+        jsonObj = await fetch("data.json");
+        myJson = await jsonObj.json();
+
+        // load svg
+        let svgObj = await fetch("map.svg");
+        let mySvg = await svgObj.text();
+
+        // insert svg into html
+        document.querySelector("#graphic").innerHTML = mySvg;
+
+        // change on mouse over
+        document.querySelector("#graphic").addEventListener("mouseover", change);
+
+    }
+    // function to change the color to pink
+    function change() {
+        // declare color
+        color = event.target.getAttribute("fill");
+        // style fill
+        event.target.style.fill = "pink";
+
+        // for each
+        let allDistrics = document.querySelectorAll("#map g[id]");
+        let singleDist = event.target.parentElement.id;
+ 
+        console.log(singleDist);
+
+        myJson.forEach(element => {
+                if (singleDist == element.city) {
+                     document.querySelector("#cityname").textContent = "Kommunens navn: " + element.city;
+                     document.querySelector("#tax-rate").textContent = "Rank " + element.rank;
+                     }}); 
+               
+
+
+        // move on on mouse out
+        document.querySelector("#graphic").addEventListener("mouseout", changeBack);
+    }
+    // function to change back to original color
+    function changeBack() {
+        event.target.style.fill = color;
+    }
+
+
+
+</script>
+</body>
+</html>
+
+
+
+
+Manipulating a SVG and showing info
+- Make a new html document
+- load map.svg and data.json into your document
+- change color on a area on mouseover
+- change the color back on mouseout
+- show info about the cities - cityname and tax base , in a div/article
+- Show the citynames with a starting capital letter
