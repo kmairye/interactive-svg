@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body {
+            position: relative;
+        }
+        p {
+            position: absolute;
+            top: 30px;
+            left: 10px;
+            width: 100%;
+            transition: all 1s;
+        }
+    </style>
+</head>
+<body>
+    <div id="graphic">
+        
+    </div>
+    <p id="text-con" style="font-family: Arial, Helvetica, sans-serif; color: #000000; position: absolute; text-align: center;"></p>
+   
+   <script>
+
+       let jsonObj;
+       let myJson;
+
+       document.addEventListener("DOMContentLoaded", loadItems);
+        async function loadItems() {
+            // load svg
+            let svgData = await fetch("layers.svg");
+            let mySvg = await svgData.text(); 
+            // insert the svg to the graphic div as html
+            document.querySelector("#graphic").innerHTML = mySvg;
+            // load json
+            jsonObj = await fetch("text.json");
+            myJson = await jsonObj.json();
+            // move on to the next function
+            document.querySelector("#graphic").addEventListener("click", showText);
+        }
+
+        function showText(){
+             let elmId = event.target.getAttribute("id");
+             console.log(elmId);
+             myJson.forEach(element => {
+                 if (elmId == element.id) {
+                     document.querySelector("#text-con").innerHTML = element.text;
+                     }
+});
+}
+
+</script>
+</body>
+</html>
